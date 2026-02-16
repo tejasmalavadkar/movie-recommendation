@@ -2,13 +2,26 @@ import streamlit as st
 import pandas as pd
 import pickle
 import urllib.parse
+import gdown
+import os
+import pickle
+
+file_id = "1BG6zfHV-Pww78aydTTze8mq_lGlkTJua"
+url = f"https://drive.google.com/uc?id={file_id}"
+
+if not os.path.exists("similarity.pkl"):
+    gdown.download(url, "similarity.pkl", quiet=False)
+
+similarity = pickle.load(open("similarity.pkl", "rb"))
+
 
 # ================= PAGE CONFIG =================
 st.set_page_config(page_title="Top Movies", layout="wide")
 
 # ================= LOAD DATA =================
 df = pd.read_csv("movie.csv")
-similarity = pickle.load(open("similarity.pkl", "rb"))
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 # ================= SESSION STATE =================
 if "page" not in st.session_state:
